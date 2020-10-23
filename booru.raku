@@ -11,8 +11,8 @@ use Booru::Upload;
 my $*RED-DEBUG = True;
 my $GLOBAL::RED-DB = database "Pg", :host<localhost>, :database<rakubooru>, :user<rakubooru>, :password<password>;
 
-Post.^create-table: :if-not-exists;
 User.^create-table: :if-not-exists;
+Post.^create-table: :if-not-exists;
 
 my $application = route {
     get -> {
