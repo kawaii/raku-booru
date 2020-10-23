@@ -2,8 +2,17 @@
 
 use Cro::HTTP::Router;
 use Cro::HTTP::Server;
+use Red:api<2>;
 
+use Booru::Schema::Post;
+use Booru::Schema::User;
 use Booru::Upload;
+
+my $*RED-DEBUG = True;
+my $GLOBAL::RED-DB = database "Pg", :host<localhost>, :database<rakubooru>, :user<rakubooru>, :password<password>;
+
+Post.^create-table;
+User.^create-table;
 
 my $application = route {
     get -> {

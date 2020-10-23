@@ -3,10 +3,10 @@ unit package Booru::Schema::Post;
 use LibUUID;
 use Red:api<2>;
 
-model Post is rw {
+model Post is table<posts> is rw is export {
     has Str $.uuid is column{ :id } = UUID.new;
-    has Int $!author-id is referencing( *.uuid, :model<Member> );
-    has $.author is relationship( *.author-id, :model<Member>);
+    has Int $!author-id is referencing( *.uuid, :model<User> );
+    has $.author is relationship( *.author-id, :model<User>);
     has Bool $.deleted is column = False;
     has DateTime $.created is column{ :type<timestamptz> } = DateTime.now;
     has Set $.tags is column{
