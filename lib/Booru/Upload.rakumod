@@ -1,4 +1,4 @@
-unit module Booru::Upload;
+unit package Booru::Upload;
 
 use Cro::HTTP::Client;
 use Cro::HTTP::Router;
