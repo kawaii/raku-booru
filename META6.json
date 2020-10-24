@@ -1,0 +1,33 @@
+{
+    "name": "Booru",
+    "description": "Danbooru inspired imageboard software written in the Raku programming language using the Cro framework.",
+    "version": "0.1",
+    "perl": "6.d",
+    "authors": [
+        "Kane 'kawaii' Valentine <kane@cute.im>"
+    ],
+    "auth": "github:kawaii",
+    "depends": [
+        "Cro::HTTP::Client",
+        "Cro::HTTP::Router",
+        "Cro::HTTP::Server",
+        "Cro::WebApp::Form",
+        "Cro::WebApp::Template",
+        "Crypt::Argon2",
+        "JSON::Fast",
+        "Red"
+    ],
+    "resources": [
+        "resources/themes/default/templates/login/login-form.crotmp",
+        "resources/themes/default/templates/register/register-form.crotmp",
+        "resources/themes/default/templates/register/register-success.crotmp"
+    ],
+    "support": {
+        "bugtracker": "https://github.com/kawaii/raku-booru/issues",
+        "source": "https://github.com/kawaii/raku-booru"
+    },
+    "license": "BSD-3-Clause",
+    "source-url": "git://git@github.com:kawaii/raku-booru.git",
+    "repo-type": "git",
+    "source-type": "git"
+}
