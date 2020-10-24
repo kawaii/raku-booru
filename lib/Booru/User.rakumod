@@ -16,8 +16,7 @@ class Register does Cro::WebApp::Form {
 }
 
 sub create-user($form) {
-    my $hashed-password = hash-password($form.password);
-    User.^create: :username($form.username), :email($form.email), :password($hashed-password);
+    User.^create: :username($form.username), :email($form.email), :password(hash-password($form.password));
 }
 
 sub hash-password(Str() $password) {
