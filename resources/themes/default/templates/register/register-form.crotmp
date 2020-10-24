@@ -4,4 +4,3 @@
     <&form(.registration-form, :submit-button-text('Register'))>
   </body>
 </html>
-

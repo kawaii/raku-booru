@@ -1,0 +1,6 @@
+<html>
+  <body>
+    <h2>Log-in to your account:</h2>
+    <&form(.login-form, :submit-button-text('Log-in'))>
+  </body>
+</html>

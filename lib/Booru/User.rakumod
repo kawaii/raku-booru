@@ -15,6 +15,11 @@ class Register does Cro::WebApp::Form {
     has Str $.repeat-password is password is required is minlength(8);
 }
 
+class Login does Cro::WebApp::Form {
+    has Str $.email is email is required;
+    has Str $.password is password is required;
+}
+
 sub create-user($form) {
     User.^create: :username($form.username), :email($form.email), :password(hash-password($form.password));
 }
@@ -26,19 +31,19 @@ sub hash-password(Str() $password) {
 sub user-routes() is export {
     route {
         get -> 'register' {
-            template 'resources/themes/default/templates/register/register.crotmp', { registration-form => Register.empty }
+            template 'resources/themes/default/templates/register/register-form.crotmp', { registration-form => Register.empty }
         }
         post -> 'register' {
             form-data -> Register $form {
                 if $form.is-valid {
                     note "Got form data: $form.raku()";
                     create-user($form);
-                    content 'text/plain', 'Account registered!';
+                    template 'resources/themes/default/templates/register/register-success.crotmp';
                 }
             }
         }
         get -> 'login' {
-            content 'text/html', 'Please log in.';
+            template 'resources/themes/default/templates/login/login-form.crotmp', { login-form => Login.empty }
         }
         get -> 'logout' {
             content 'text/html', 'You are logged out.';
