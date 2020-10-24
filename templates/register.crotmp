@@ -1,7 +1,0 @@
-<html>
-  <body>
-    <h2>Register a new account:</h2>
-    <&form(.form, :submit-button-text('Register'))>
-  </body>
-</html>
-
