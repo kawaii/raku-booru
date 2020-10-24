@@ -26,7 +26,7 @@ sub hash-password(Str() $password) {
 sub user-routes() is export {
     route {
         get -> 'register' {
-            template 'resources/templates/register.crotmp', { form => Register.empty }
+            template 'resources/themes/default/templates/register/register.crotmp', { registration-form => Register.empty }
         }
         post -> 'register' {
             form-data -> Register $form {
