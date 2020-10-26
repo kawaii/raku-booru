@@ -6,19 +6,9 @@ use Cro::WebApp::Form;
 use Cro::WebApp::Template;
 use Crypt::Argon2;
 
+use Booru::Form;
 use Booru::Schema::User;
-
-class Register does Cro::WebApp::Form {
-    has Str $.username is required is validated(/^<[A..Za..z0..9]>+$/, 'Only alphanumerics are allowed.') is minlength(3) is maxlength(16);
-    has Str $.email is email is required;
-    has Str $.password is password is required is minlength(8);
-    has Str $.repeat-password is password is required is minlength(8);
-}
-
-class Login does Cro::WebApp::Form {
-    has Str $.email is email is required;
-    has Str $.password is password is required;
-}
+use Booru::Session;
 
 sub create-user($form) {
     User.^create: :username($form.username), :email($form.email), :password(hash-password($form.password));
@@ -28,8 +18,14 @@ sub hash-password(Str() $password) {
     return argon2-hash($password);
 }
 
+sub verify-password($username, $password) {
+    my $user-query = User.check: :$username;
+    argon2-verify($user-query.password, $password)
+}
+
 sub user-routes() is export {
     route {
+        subset LoggedIn of UserSession where *.logged-in;
         get -> 'register' {
             template 'resources/themes/default/templates/register/register-form.crotmp', { registration-form => Register.empty }
         }
@@ -42,8 +38,18 @@ sub user-routes() is export {
                 }
             }
         }
-        get -> 'login' {
+        get -> UserSession $user, 'login' {
             template 'resources/themes/default/templates/login/login-form.crotmp', { login-form => Login.empty }
+        }
+        post -> UserSession $user, 'login' {
+            form-data -> Login $form {
+                if verify-password($form.username, $form.password) {
+                    $user.username = $form.username;
+                    redirect '/', :see-other;
+                } else {
+                    content 'text/html', "Bad username/password";
+                }
+            }
         }
         get -> 'logout' {
             content 'text/html', 'You are logged out.';
