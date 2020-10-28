@@ -13,7 +13,7 @@ model User is table<users> is rw is export {
     has @.posts is relationship({ .author-id }, :model<Booru::Schema::Post>);
 
     method verify-password($password) {
-        argon2-verify($password, $!password);
+        argon2-verify($!password, $password);
     }
 
     method disable {
