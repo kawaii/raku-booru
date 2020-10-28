@@ -18,11 +18,6 @@ sub hash-password(Str() $password) {
     return argon2-hash($password);
 }
 
-sub verify-password($username, $password) {
-    my $user-query = User.check: :$username;
-    argon2-verify($user-query.password, $password)
-}
-
 sub user-routes() is export {
     route {
         subset LoggedIn of UserSession where *.logged-in;
@@ -43,8 +38,9 @@ sub user-routes() is export {
         }
         post -> UserSession $user, 'login' {
             form-data -> Login $form {
-                if verify-password($form.username, $form.password) {
-                    $user.username = $form.username;
+                my $subject = User.^all.first: *.email eq $form.email;
+                if $subject.?check-password($form.password) {
+                    $user.username = $form.email;
                     redirect '/', :see-other;
                 } else {
                     content 'text/html', "Bad username/password";

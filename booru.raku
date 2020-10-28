@@ -4,6 +4,7 @@ use Cro::HTTP::Router;
 use Cro::HTTP::Server;
 use Red:api<2>;
 
+use Booru::Session;
 use Booru::Schema::Post;
 use Booru::Schema::User;
 use Booru::Upload;
@@ -15,7 +16,8 @@ my $GLOBAL::RED-DB = database "Pg", :host<localhost>, :database<rakubooru>, :use
 User.^create-table: :if-not-exists;
 Post.^create-table: :if-not-exists;
 
-my $application = route {
+my $routes = route {
+    subset LoggedIn of UserSession where *.logged-in;
     get -> {
         content 'text/html', 'Hello World!';
     }
@@ -23,7 +25,14 @@ my $application = route {
     include user-routes();
 }
 
-my Cro::Service $service = Cro::HTTP::Server.new(:host('localhost'), :port(2314), :$application);
+sub routes() is export {
+    route {
+        before Cro::HTTP::Session::InMemory[UserSession].new;
+        delegate <*> => $routes;
+    }
+}
+
+my Cro::Service $service = Cro::HTTP::Server.new(:host('localhost'), :port(2314), application => routes());
 
 $service.start;
 
