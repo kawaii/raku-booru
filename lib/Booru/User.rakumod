@@ -20,7 +20,6 @@ sub hash-password(Str() $password) {
 
 sub user-routes() is export {
     route {
-        subset LoggedIn of UserSession where *.logged-in;
         get -> 'register' {
             template 'resources/themes/default/templates/register/register-form.crotmp', { registration-form => Register.empty }
         }
@@ -38,8 +37,8 @@ sub user-routes() is export {
         }
         post -> UserSession $user, 'login' {
             form-data -> Login $form {
-                my $subject = User.^all.first: *.email eq $form.email;
-                if $subject.?check-password($form.password) {
+                my $subject = User.^load(email => $form.email);
+                if $subject.?verify-password($form.password) {
                     $user.username = $form.email;
                     redirect '/', :see-other;
                 } else {
@@ -47,8 +46,9 @@ sub user-routes() is export {
                 }
             }
         }
-        get -> 'logout' {
-            content 'text/html', 'You are logged out.';
+        post -> UserSession $user, 'logout' {
+            $user.username = Nil;
+            redirect '/', :see-other;
         }
     }
 }
