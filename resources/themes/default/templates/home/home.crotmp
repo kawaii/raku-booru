@@ -1,0 +1,3 @@
+<:use 'resources/themes/default/templates/global/header.crotmp'>
+<&header>
+<p>Hello, <.username>. You registered on <.registration-date>.</p>

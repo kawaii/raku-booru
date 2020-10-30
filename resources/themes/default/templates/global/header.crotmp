@@ -1,0 +1,6 @@
+<:use 'resources/themes/default/templates/global/navigation.crotmp'>
+<:sub header>
+  <header>
+      <&navigation>
+  </header>
+</:>

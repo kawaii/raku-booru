@@ -13,3 +13,7 @@ class Login does Cro::WebApp::Form is export {
     has Str $.email is email is required;
     has Str $.password is password is required;
 }
+
+class Upload does Cro::WebApp::Form is export {
+    has Str $.title is required;
+}

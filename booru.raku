@@ -2,9 +2,12 @@
 
 use Cro::HTTP::Router;
 use Cro::HTTP::Server;
+use Cro::WebApp::Form;
+use Cro::WebApp::Template;
 use Red:api<2>;
 
 use Booru::Session;
+use Booru::Schema::Favorite;
 use Booru::Schema::Post;
 use Booru::Schema::User;
 use Booru::Upload;
@@ -15,11 +18,12 @@ my $GLOBAL::RED-DB = database "Pg", :host<localhost>, :database<rakubooru>, :use
 
 User.^create-table: :if-not-exists;
 Post.^create-table: :if-not-exists;
+Favorite.^create-table: :if-not-exists;
 
 my $routes = route {
     subset LoggedIn of UserSession where *.logged-in;
-    get -> {
-        content 'text/html', 'Hello World!';
+    get -> UserSession $s {
+        template 'resources/themes/default/templates/home/home.crotmp', $s.user-data;
     }
     include upload-routes();
     include user-routes();

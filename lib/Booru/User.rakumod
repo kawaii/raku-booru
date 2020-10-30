@@ -39,7 +39,7 @@ sub user-routes() is export {
             form-data -> Login $form {
                 my $subject = User.^load(email => $form.email);
                 if $subject.?verify-password($form.password) {
-                    $user.username = $form.email;
+                    $user.email = $form.email;
                     redirect '/', :see-other;
                 } else {
                     content 'text/html', "Bad username/password";
@@ -47,7 +47,7 @@ sub user-routes() is export {
             }
         }
         post -> UserSession $user, 'logout' {
-            $user.username = Nil;
+            $user.email = Nil;
             redirect '/', :see-other;
         }
     }
