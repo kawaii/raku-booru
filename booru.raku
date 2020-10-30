@@ -23,7 +23,7 @@ Favorite.^create-table: :if-not-exists;
 my $routes = route {
     subset LoggedIn of UserSession where *.logged-in;
     get -> LoggedIn $user {
-        template 'resources/themes/default/templates/home/home.crotmp', %(u => $user.user-data);
+        template 'resources/themes/default/templates/home/home.crotmp', %({g =>  { ns => username => $user.user-data.username, email => $user.user-data.email}});
     }
     get -> UserSession $s {
         template 'resources/themes/default/templates/home/home.crotmp';

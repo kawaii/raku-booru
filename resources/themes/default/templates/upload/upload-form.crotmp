@@ -1,5 +1,6 @@
 <html>
   <body>
     <div>Upload a new image here.</div>
+    <&form(.upload-form, :enctype('multipart/form-data'), :submit-button-text('New Post'))>
   </body>
 </html>

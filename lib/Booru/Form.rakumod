@@ -16,4 +16,5 @@ class Login does Cro::WebApp::Form is export {
 
 class Upload does Cro::WebApp::Form is export {
     has Str $.title is required;
+    has $.file is file is required;
 }

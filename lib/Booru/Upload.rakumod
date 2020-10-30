@@ -12,9 +12,16 @@ sub upload-routes() is export {
     route {
         get -> UserSession $s, 'upload' {
             if $s.logged-in {
-                template 'resources/themes/default/templates/upload/upload-form.crotmp';
+                template 'resources/themes/default/templates/upload/upload-form.crotmp', { upload-form => Upload.empty };
             } else {
-                redirect :temporary, '/login';
+                redirect '/login', :see-other;
+            }
+        }
+        post -> 'upload' {
+            form-data -> Upload $form {
+                if $form.is-valid {
+                    say "Got form data: $form.raku()";
+                }
             }
         }
     }
