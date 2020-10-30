@@ -13,7 +13,6 @@ class UserSession does Cro::HTTP::Auth is export {
     }
 
     method user-data() {
-        my $u = User.^load(:$!email);
-        return %(username => $u.username, email => $u.email, registration-date => $u.registration-date);
+        User.^load(:$!email);
     }
 }

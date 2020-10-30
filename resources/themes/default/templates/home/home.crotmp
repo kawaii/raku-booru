@@ -1,3 +1,5 @@
+<:use 'resources/themes/default/templates/global/head.crotmp'>
 <:use 'resources/themes/default/templates/global/header.crotmp'>
+<&head>
 <&header>
-<p>Hello, <.username>. You registered on <.registration-date>.</p>
+<?$_><p>Hello, <.username>. You registered on <.registration-date>.</p></?>
